@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:include="layout :: page">
+	<body>
+		<div th:fragment="content">
+			<form action="#" th:action="@{/todo/save}" th:object="${todoForm}" method="post">
+				<div class="form-group">
+				   <input type="text" class="form-control" id="description" th:field="*{description}"></input>
+				   <p th:if="${#fields.hasErrors('description') == true}" th:errors="*{description}" th:class="help-block">Error en descripcion</p>
+				 </div>
+			</form>
+		
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th>Estado</th>
+			      <th>Descripción</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="todo : ${todos}">
+			      <td><input type="checkbox" name="active" th:checked="${todo.done}" /></td>
+			      <td><span th:text="${todo.description}"></span></td>
+			    </tr>
+			  </tbody>
+			</table>
+			<script th:src="@{/js/bootstrap.min.js}"></script>
+		</div>
+	</body>
+	
+</html>
