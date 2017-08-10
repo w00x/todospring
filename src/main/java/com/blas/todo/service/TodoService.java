@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blas.todo.entity.Todo;
@@ -18,13 +19,18 @@ public class TodoService implements ITodoService {
 	private TodoRepository todoRepository;
 
 	@Override
-	public List<Todo> allTodos() {
-		return todoRepository.findAll();
+	public List<Todo> allTodosDesc() {
+		return todoRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
 	}
 
 	@Override
 	public void saveTodo(Todo todo) {
 		todoRepository.save(todo);		
+	}
+
+	@Override
+	public Todo findById(Long id) {
+		return todoRepository.findById(id);
 	}
 
 }

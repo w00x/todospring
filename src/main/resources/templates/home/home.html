@@ -16,12 +16,21 @@
 			    <tr>
 			      <th>Estado</th>
 			      <th>Descripción</th>
+			      <th></th>
 			    </tr>
 			  </thead>
 			  <tbody>
 			    <tr th:each="todo : ${todos}">
 			      <td><input type="checkbox" name="active" th:checked="${todo.done}" /></td>
-			      <td><span th:text="${todo.description}"></span></td>
+			      <td>
+			      	<span th:id="'show_' + ${todo.id}" th:text="${todo.description}"></span>
+			      	<input th:id="'edit_in_' + ${todo.id}" th:value="${todo.description}" type="text" class="edit" th:attr="data-id=${todo.id}" style="display: none;"></input>
+			      </td>
+			      <td>
+			      	<span th:id="'save_' + ${todo.id}" th:attr="data-id=${todo.id}" style="cursor: pointer; display: none;" class="glyphicon glyphicon-floppy-disk save" aria-hidden="true"></span>
+			      	<span th:id="'edit_' + ${todo.id}" th:attr="data-id=${todo.id}" style="cursor: pointer;" class="glyphicon glyphicon-pencil edit" aria-hidden="true"></span>
+			      	<span th:id="'delete_' + ${todo.id}" th:attr="data-id=${todo.id}" style="cursor: pointer;" class="glyphicon glyphicon-trash delete" aria-hidden="true"></span>
+			      </td>
 			    </tr>
 			  </tbody>
 			</table>

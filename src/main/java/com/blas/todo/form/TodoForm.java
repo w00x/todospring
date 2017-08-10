@@ -10,17 +10,14 @@ public class TodoForm {
 	@Size(min=2, max=10)
 	private String description;
 	
-	private String error;
-	
 	public TodoForm() {
 		
 	}
 
-	public TodoForm(Long id, boolean done, String description, String error) {
+	public TodoForm(Long id, boolean done, String description) {
 		super();
 		this.done = done;
 		this.description = description;
-		this.error = error;
 	}
 
 	public boolean isDone() {
@@ -37,13 +34,5 @@ public class TodoForm {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getError() {
-		return error;
-	}
-
-	public void setError(String error) {
-		this.error = error;
 	}
 }

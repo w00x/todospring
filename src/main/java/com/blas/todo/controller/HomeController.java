@@ -30,7 +30,7 @@ public class HomeController {
 	@GetMapping("/")
 	public ModelAndView home() {
 		ModelAndView mav = new ModelAndView("home/home");
-		List<Todo> todos = todoService.allTodos();
+		List<Todo> todos = todoService.allTodosDesc();
 		mav.addObject("todos", todos);
 		mav.addObject("todoForm", new TodoForm());
 		return mav;
@@ -44,7 +44,7 @@ public class HomeController {
 			todoService.saveTodo(todo);
 		}
 		else {
-			List<Todo> todos = todoService.allTodos();
+			List<Todo> todos = todoService.allTodosDesc();
 			model.addAttribute("todos", todos);
 			return "home/home";
 		}
