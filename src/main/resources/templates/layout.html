@@ -51,6 +51,13 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Salir"/>
+              </form>
+            </li>
+          </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>

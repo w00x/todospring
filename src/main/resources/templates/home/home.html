@@ -20,8 +20,8 @@
 			    </tr>
 			  </thead>
 			  <tbody>
-			    <tr th:each="todo : ${todos}">
-			      <td><input type="checkbox" name="active" th:checked="${todo.done}" /></td>
+			    <tr th:id="'tr_' + ${todo.id}" th:each="todo : ${todos}">
+			      <td><input type="checkbox" name="active" th:checked="${todo.done}" class="check" th:attr="data-id=${todo.id}" th:id="'checkid_' + ${todo.id}" /></td>
 			      <td>
 			      	<span th:id="'show_' + ${todo.id}" th:text="${todo.description}"></span>
 			      	<input th:id="'edit_in_' + ${todo.id}" th:value="${todo.description}" type="text" class="edit" th:attr="data-id=${todo.id}" style="display: none;"></input>

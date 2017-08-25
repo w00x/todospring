@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+    <meta name="description" content=""></meta>
+    <meta name="author" content=""></meta>
+
+    <title>Login</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/signin.css}" rel="stylesheet"></link>
+</head>
+
+<body>
+
+<div class="container">
+    <div th:if="${param.error}">
+        Contraseña no son iguales
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+
+    <form th:action="@{/create_acount}" method="post" class="form-signin" th:object="${accountForm}">
+        <p th:if="${#fields.hasErrors('all')}" th:errors="*{all}">Incorrect date</p>
+        <p th:if="${error_noequal} == 1">Email o password incorrectos</p>
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" th:field="*{email}" id="inputEmail" class="form-control" placeholder="Email address" autofocus="autofocus"></input>
+
+        <input type="password" th:field="*{password}" class="form-control" placeholder="Password"></input>
+
+        <input type="password" th:field="*{rePassword}" class="form-control" placeholder="Reingresar password"></input>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <a th:href="@{/login}">Login</a>
+    </form>
+
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script th:src="@{/js/ie10-viewport-bug-workaround.js}"></script>
+</body>
+</html>

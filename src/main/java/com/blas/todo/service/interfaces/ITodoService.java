@@ -8,4 +8,5 @@ public interface ITodoService {
 	public abstract List<Todo> allTodosDesc();
 	public abstract void saveTodo(Todo todo);
 	public abstract Todo findById(Long id);
+	public abstract void deleteById(Long id);
 }

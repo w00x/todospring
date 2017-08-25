@@ -33,4 +33,12 @@ public class TodoService implements ITodoService {
 		return todoRepository.findById(id);
 	}
 
+	@Override
+	public void deleteById(Long id) {
+		Todo todo = todoRepository.findById(id);
+		if(todo != null) {
+			todoRepository.delete(todo);
+		}
+	}
+
 }
