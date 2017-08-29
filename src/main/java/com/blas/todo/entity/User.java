@@ -1,6 +1,5 @@
 package com.blas.todo.entity;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,36 +9,45 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue
+    @Column(name="user_id", unique = true, nullable = false)
+    private Integer userId;
 
-    @Column(name = "email")
-    @Email(message = "*Ingresa un email valido")
-    @NotEmpty(message = "*Ingresa un email")
-    private String email;
+    @Column(name = "username", unique = true, nullable = false, length = 45)
+    @NotEmpty(message = "*Ingresa un nombre de usuario")
+    private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false, length = 60)
     @Length(min = 5, message = "*Tu passoword como minimo debe tener 5 caracteres")
     @NotEmpty(message = "*Ingresa tu contraseña")
     private String password;
 
-    @Column(name = "active")
-    private int active;
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable//(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
-    public Long getId() {
-        return id;
+    public User(String username, String password, boolean enabled, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.roles = roles;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public User() {
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -50,27 +58,27 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getActive() {
-        return active;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setActive(int active) {
-        this.active = active;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRole() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRole(Set<Role> roles) {
         this.roles = roles;
     }
 }

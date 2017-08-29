@@ -1,16 +1,13 @@
 package com.blas.todo.controller;
 
 import com.blas.todo.entity.Role;
-import com.blas.todo.entity.Todo;
 import com.blas.todo.entity.User;
 import com.blas.todo.form.AccountForm;
-import com.blas.todo.form.TodoForm;
 import com.blas.todo.repository.RoleRepository;
 import com.blas.todo.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 @Controller
 public class LoginController {
@@ -60,12 +56,12 @@ public class LoginController {
 
         if (!bindingResult.hasErrors()) {
             User user = new User();
-            user.setActive(1);
-            user.setEmail(accountForm.getEmail());
+            user.setEnabled(true);
+            user.setUsername(accountForm.getEmail());
             user.setPassword(passwordEncoder.encode(accountForm.getPassword()));
 
-            Role userRole = roleRepository.findByRole("ADMIN");
-            user.setRoles(Arrays.asList(userRole));
+            Role role = roleRepository.findByRole("ADMIN");
+            user.setRole(new HashSet<Role>(Arrays.asList(role)));
             userRepository.save(user);
         }
         else {

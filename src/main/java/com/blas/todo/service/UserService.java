@@ -1,35 +1,44 @@
 package com.blas.todo.service;
 
 import com.blas.todo.entity.Role;
-import com.blas.todo.entity.User;
-import com.blas.todo.repository.RoleRepository;
 import com.blas.todo.repository.UserRepository;
-import com.blas.todo.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
-public class UserService implements IUserService {
+@Service("userService")
+public class UserService implements UserDetailsService {
     @Autowired
+    @Qualifier("userRepository")
     private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        com.blas.todo.entity.User user = userRepository.findByUsername(username);
+        List<GrantedAuthority> autorithies = buildAuthorities(user.getRole());
+
+        return buildUser(user, autorithies);
     }
 
-    @Override
-    public void saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setActive(1);
-        Role userRole = roleRepository.findByRole("ADMIN");
-        user.setRoles(Arrays.asList(userRole));
-        userRepository.save(user);
+    private User buildUser(com.blas.todo.entity.User user, List<GrantedAuthority> authorities) {
+        return new User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
+    }
+
+    private List<GrantedAuthority> buildAuthorities(Set<Role> roles) {
+        Set<GrantedAuthority> auths = new HashSet<GrantedAuthority>();
+
+        for (Role role : roles) {
+            auths.add(new SimpleGrantedAuthority(role.getRole()));
+        }
+
+        return new ArrayList<GrantedAuthority>(auths);
     }
 }
