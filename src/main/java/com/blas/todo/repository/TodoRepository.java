@@ -10,8 +10,5 @@ import com.blas.todo.entity.Todo;
 
 @Repository("todoRepository")
 public interface TodoRepository extends JpaRepository<Todo, Serializable> {
-	
-	public abstract Todo findByDescription(String description);
-	public abstract Todo findById(Long id);
-	
+	Todo findById(Long id);
 }

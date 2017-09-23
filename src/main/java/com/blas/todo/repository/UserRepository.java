@@ -8,5 +8,5 @@ import java.io.Serializable;
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Serializable> {
-    public abstract User findByUsername(String username);
+    User findByUsername(String username);
 }

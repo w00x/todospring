@@ -6,6 +6,9 @@ import com.blas.todo.repository.RoleRepository;
 import com.blas.todo.repository.UserRepository;
 import com.blas.todo.repository.VerificationTokenRepository;
 import com.blas.todo.service.interfaces.IUserService;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -19,7 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -43,6 +48,9 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    Configuration fmConfiguration;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -113,12 +121,27 @@ public class UserService implements UserDetailsService, IUserService {
     public void sendMailNewPassword(com.blas.todo.entity.User user, String newPassord) {
         String recipientAddress = user.getUsername();
         String subject = "Recuperar password";
-        String message = messages.getMessage("message.renewPassSucc", null, new Locale("en", "US"));
+
+        Map<String, String> context = new HashMap<>();
+        context.put("newPassord", newPassord);
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + " " + newPassord);
+
+        try {
+            Template template = fmConfiguration.getTemplate("mail/restorePassword.ftl");
+            String messageHtml = FreeMarkerTemplateUtils.processTemplateIntoString(template, context);
+
+            email.setText(messageHtml);
+        }
+        catch(IOException ex) {
+
+        }
+        catch(TemplateException ex) {
+
+        }
+
         mailSender.send(email);
     }
 

@@ -33,7 +33,5 @@ public class TodoRestController {
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable Long id) {
 		todoService.deleteById(id);
-		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		//return ResponseEntity.ok(json);
 	}
 }
